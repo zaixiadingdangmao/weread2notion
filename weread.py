@@ -329,9 +329,10 @@ def get_children(chapter, summary, bookmark_list):
                         continue
                     if(i.get("colorStyle") not in colors):
                         continue
-                markText = i.get("markText")
-                for j in range(0, len(markText)//2000+1):
-                    children.append(get_callout(markText[j*2000:(j+1)*2000],i.get("style"), i.get("colorStyle"), i.get("reviewId")))
+                # markText = i.get("markText")
+                # for j in range(0, len(markText)//2000+1):
+                #     children.append(get_callout(markText[j*2000:(j+1)*2000],i.get("style"), i.get("colorStyle"), i.get("reviewId")))
+                children.append(get_callout(i.get("markText"), i.get("style"), i.get("colorStyle"), i.get("reviewId")))
                 if i.get("abstract") != None and i.get("abstract") != "":
                     quote = get_quote(i.get("abstract"))
                     grandchild[len(children)-1] = quote
