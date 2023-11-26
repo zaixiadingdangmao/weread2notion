@@ -130,6 +130,20 @@ def get_quote(content):
     }
 
 
+def bulleted_list_item(content):
+    return {
+        "type": "bulleted_list_item",
+        "bulleted_list_item": {
+            "rich_text": [{
+                "type": "text",
+                "text": {
+                    "content": content,
+                }
+            }],
+            "color": "default"
+        }
+    }
+
 def get_callout(content, style, colorStyle, reviewId):
     # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
     emoji = "〰️"
@@ -311,7 +325,9 @@ def get_children(chapter, summary, bookmark_list):
     grandchild = {}
     if chapter != None:
         # 添加目录
+        children.append(get_heading(1, '目录'))
         children.append(get_table_of_contents())
+        children.append(get_heading(1, '内容摘录'))
         d = {}
         for data in bookmark_list:
             chapterUid = data.get("chapterUid", 1)
@@ -322,16 +338,11 @@ def get_children(chapter, summary, bookmark_list):
             if key in chapter:
                 # 添加章节
                 children.append(get_heading(
-                    chapter.get(key).get("level"), chapter.get(key).get("title")))
+                    1+chapter.get(key).get("level"), chapter.get(key).get("title")))
             for i in value:
-                # if(i.get("reviewId")==None):
-                #     if(i.get("style") not in styles):
-                #         continue
-                #     if(i.get("colorStyle") not in colors):
-                #         continue
                 markText = i.get("markText")
                 for j in range(0, len(markText)//2000+1):
-                    children.append(get_callout(markText[j*2000:(j+1)*2000],i.get("style"), i.get("colorStyle"), i.get("reviewId")))
+                    children.append(bulleted_list_item(markText[j*2000:(j+1)*2000]))
                 if i.get("abstract") != None and i.get("abstract") != "":
                     quote = get_quote(i.get("abstract"))
                     grandchild[len(children)-1] = quote
@@ -339,17 +350,11 @@ def get_children(chapter, summary, bookmark_list):
     else:
         # 如果没有章节信息
         for data in bookmark_list:
-            # if(data.get("reviewId")==None):
-            #     if(data.get("style") not in styles):
-            #         continue
-            #     if(data.get("colorStyle") not in colors):
-            #         continue
             markText = data.get("markText")
             for i in range(0, len(markText)//2000+1):
-                children.append(get_callout(markText[i*2000:(i+1)*2000],
-                                data.get("style"), data.get("colorStyle"), data.get("reviewId")))
+                children.append(bulleted_list_item(markText[i*2000:(i+1)*2000]))
     if summary != None and len(summary) > 0:
-        children.append(get_heading(1, "点评"))
+        children.append(get_heading(1, "读书心得"))
         for i in summary:
             content = i.get("review").get("content")
             for j in range(0, len(content)//2000+1):
@@ -437,8 +442,8 @@ if __name__ == "__main__":
     ref = options.ref
     branch = ref.split('/')[-1]
     repository = options.repository
-    styles = options.styles
-    colors = options.colors
+    # styles = options.styles
+    # colors = options.colors
     session = requests.Session()
     session.cookies = parse_cookie_string(weread_cookie)
     client = Client(
