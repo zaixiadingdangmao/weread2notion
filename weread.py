@@ -313,7 +313,6 @@ def get_children(chapter, summary, bookmark_list):
         # 添加目录
         children.append(get_table_of_contents())
         d = {}
-        print(f"bookmark_list {bookmark_list}")
         for data in bookmark_list:
             chapterUid = data.get("chapterUid", 1)
             if (chapterUid not in d):
@@ -325,13 +324,12 @@ def get_children(chapter, summary, bookmark_list):
                 children.append(get_heading(
                     chapter.get(key).get("level"), chapter.get(key).get("title")))
             for i in value:
-                if(i.get("reviewId")==None):
-                    if(i.get("style") not in styles):
-                        continue
-                    if(i.get("colorStyle") not in colors):
-                        continue
+                # if(i.get("reviewId")==None):
+                #     if(i.get("style") not in styles):
+                #         continue
+                #     if(i.get("colorStyle") not in colors):
+                #         continue
                 markText = i.get("markText")
-                print(f"markText {markText}")
                 for j in range(0, len(markText)//2000+1):
                     children.append(get_callout(markText[j*2000:(j+1)*2000],i.get("style"), i.get("colorStyle"), i.get("reviewId")))
                 if i.get("abstract") != None and i.get("abstract") != "":
@@ -341,11 +339,11 @@ def get_children(chapter, summary, bookmark_list):
     else:
         # 如果没有章节信息
         for data in bookmark_list:
-            if(data.get("reviewId")==None):
-                if(data.get("style") not in styles):
-                    continue
-                if(data.get("colorStyle") not in colors):
-                    continue
+            # if(data.get("reviewId")==None):
+            #     if(data.get("style") not in styles):
+            #         continue
+            #     if(data.get("colorStyle") not in colors):
+            #         continue
             markText = data.get("markText")
             for i in range(0, len(markText)//2000+1):
                 children.append(get_callout(markText[i*2000:(i+1)*2000],
