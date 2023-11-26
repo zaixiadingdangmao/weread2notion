@@ -130,7 +130,7 @@ def get_quote(content):
     }
 
 
-def bulleted_list_item(content):
+def get_bulleted_list_item(content):
     return {
         "type": "bulleted_list_item",
         "bulleted_list_item": {
@@ -141,6 +141,19 @@ def bulleted_list_item(content):
                 }
             }],
             "color": "default"
+        }
+    }
+
+def get_paragraph(content):
+    return {
+        "type": "paragraph",
+        "paragraph": {
+            "text": [{
+                "type": "text",
+                "text": {
+                    "content": content,
+                }
+            }],
         }
     }
 
@@ -306,21 +319,21 @@ def get_children(chapter, summary, bookmark_list):
                     grandchild[len(children)-1] = quote
                     continue
                 for j in range(0, len(markText)//2000+1):
-                    children.append(bulleted_list_item(markText[j*2000:(j+1)*2000]))
+                    children.append(get_bulleted_list_item(markText[j*2000:(j+1)*2000]))
 
     else:
         # 如果没有章节信息
         for data in bookmark_list:
             markText = data.get("markText")
             for i in range(0, len(markText)//2000+1):
-                children.append(bulleted_list_item(markText[i*2000:(i+1)*2000]))
+                children.append(get_bulleted_list_item(markText[i*2000:(i+1)*2000]))
     if summary != None and len(summary) > 0:
         print(f"summary to {summary}")
         children.append(get_heading(2, "读书点评 🍀"))
         for i in summary:
             content = i.get("review").get("content")
             for j in range(0, len(content)//2000+1):
-                children.append(bulleted_list_item(content[j*2000:(j+1)*2000]))
+                children.append({get_paragraph(content[j*2000:(j+1)*2000])})
     return children, grandchild
 
 def transform_id(book_id):
