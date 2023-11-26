@@ -327,7 +327,7 @@ def get_children(chapter, summary, bookmark_list):
         # 添加目录
         children.append(get_heading(1, '目录'))
         children.append(get_table_of_contents())
-        children.append(get_heading(1, '内容摘录'))
+        children.append(get_heading(1, '内容摘录 ☘️'))
         d = {}
         for data in bookmark_list:
             chapterUid = data.get("chapterUid", 1)
@@ -341,11 +341,12 @@ def get_children(chapter, summary, bookmark_list):
                     1+chapter.get(key).get("level"), chapter.get(key).get("title")))
             for i in value:
                 markText = i.get("markText")
+                if i.get("abstract") != None and i.get("abstract") != "":
+                    quote = get_quote(i.get("markText"))
+                    grandchild[len(children)-1] = quote
+                    continue
                 for j in range(0, len(markText)//2000+1):
                     children.append(bulleted_list_item(markText[j*2000:(j+1)*2000]))
-                if i.get("abstract") != None and i.get("abstract") != "":
-                    quote = get_quote(i.get("abstract"))
-                    grandchild[len(children)-1] = quote
 
     else:
         # 如果没有章节信息
@@ -354,7 +355,7 @@ def get_children(chapter, summary, bookmark_list):
             for i in range(0, len(markText)//2000+1):
                 children.append(bulleted_list_item(markText[i*2000:(i+1)*2000]))
     if summary != None and len(summary) > 0:
-        children.append(get_heading(1, "读书心得"))
+        children.append(get_heading(1, "读书心得 🍀"))
         for i in summary:
             content = i.get("review").get("content")
             for j in range(0, len(content)//2000+1):
