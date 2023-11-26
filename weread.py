@@ -313,6 +313,7 @@ def get_children(chapter, summary, bookmark_list):
         # 添加目录
         children.append(get_table_of_contents())
         d = {}
+        print(f"bookmark_list {bookmark_list}")
         for data in bookmark_list:
             chapterUid = data.get("chapterUid", 1)
             if (chapterUid not in d):
