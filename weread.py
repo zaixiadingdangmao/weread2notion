@@ -148,12 +148,13 @@ def get_paragraph(content):
     return {
         "type": "paragraph",
         "paragraph": {
-            "text": [{
+            "rich_text": [{
                 "type": "text",
                 "text": {
                     "content": content,
                 }
             }],
+            "color": "default"
         }
     }
 
@@ -328,7 +329,6 @@ def get_children(chapter, summary, bookmark_list):
             for i in range(0, len(markText)//2000+1):
                 children.append(get_bulleted_list_item(markText[i*2000:(i+1)*2000]))
     if summary != None and len(summary) > 0:
-        print(f"summary to {summary}")
         children.append(get_heading(2, "读书点评 🍀"))
         for i in summary:
             content = i.get("review").get("content")
