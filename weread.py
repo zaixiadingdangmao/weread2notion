@@ -144,44 +144,6 @@ def bulleted_list_item(content):
         }
     }
 
-def get_callout(content, style, colorStyle, reviewId):
-    # 根据不同的划线样式设置不同的emoji 直线type=0 背景颜色是1 波浪线是2
-    emoji = "〰️"
-    if style == 0:
-        emoji = "💡"
-    elif style == 1:
-        emoji = "⭐"
-    # 如果reviewId不是空说明是笔记
-    if reviewId != None:
-        emoji = "✍️"
-    color = "default"
-    # 根据划线颜色设置文字的颜色
-    if colorStyle == 1:
-        color = "red"
-    elif colorStyle == 2:
-        color = "purple"
-    elif colorStyle == 3:
-        color = "blue"
-    elif colorStyle == 4:
-        color = "green"
-    elif colorStyle == 5:
-        color = "yellow"
-    return {
-        "type": "callout",
-        "callout": {
-            "rich_text": [{
-                "type": "text",
-                "text": {
-                    "content": content,
-                }
-            }],
-            "icon": {
-                "emoji": emoji
-            },
-            "color": color
-        }
-    }
-
 
 def check(bookId):
     """检查是否已经插入过 如果已经插入了就删除"""
@@ -353,12 +315,12 @@ def get_children(chapter, summary, bookmark_list):
             for i in range(0, len(markText)//2000+1):
                 children.append(bulleted_list_item(markText[i*2000:(i+1)*2000]))
     if summary != None and len(summary) > 0:
-        children.append(get_heading(2, "读书点评"))
+        print(f"summary to {summary}")
+        children.append(get_heading(2, "读书点评 🍀"))
         for i in summary:
             content = i.get("review").get("content")
             for j in range(0, len(content)//2000+1):
-                children.append(get_callout(content[j*2000:(j+1)*2000], i.get(
-                    "style"), i.get("colorStyle"), i.get("review").get("reviewId")))
+                children.append(bulleted_list_item(content[j*2000:(j+1)*2000]))
     return children, grandchild
 
 def transform_id(book_id):
