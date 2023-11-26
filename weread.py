@@ -146,16 +146,16 @@ def get_bulleted_list_item(content):
 
 def get_paragraph(content):
     return {
-        # "type": "paragraph",
-        # "paragraph": {
-        "rich_text": [{
-            "type": "text",
-            "text": {
-                "content": content,
-            }
-        }],
-        #     "color": "default"
-        # }
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {
+                    "content": content,
+                }
+            }],
+            "color": "default"
+        }
     }
 
 
@@ -333,7 +333,7 @@ def get_children(chapter, summary, bookmark_list):
         for i in summary:
             content = i.get("review").get("content")
             for j in range(0, len(content)//2000+1):
-                children.append({get_bulleted_list_item(content[j*2000:(j+1)*2000])})
+                children.append(get_paragraph(content[j*2000:(j+1)*2000]))
     return children, grandchild
 
 def transform_id(book_id):
