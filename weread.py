@@ -332,8 +332,7 @@ def get_children(chapter, summary, bookmark_list):
                 markText = i.get("markText")
                 # for j in range(0, len(markText)//2000+1):
                 #     children.append(get_callout(markText[j*2000:(j+1)*2000],i.get("style"), i.get("colorStyle"), i.get("reviewId")))
-                children.append({"type": "text", "text": {"content": markText}})
-                children.append({"type": "text", "text": {"content": 'markText'}})
+                children.append({"rich_text": [{"type": "text", "text": {"content": 'markText'}}]})
                 if i.get("abstract") != None and i.get("abstract") != "":
                     quote = get_quote(i.get("abstract"))
                     grandchild[len(children)-1] = quote
